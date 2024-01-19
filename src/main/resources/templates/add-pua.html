@@ -153,6 +153,7 @@
 <div class="container">
     <h2>Afageix una nova pua</h2>
     <form action="/add" method="post" enctype="multipart/form-data">
+
         <div class="form-group">
             <label for="reporter">Reporter:</label>
             <select id="reporter" name="reporter" class="beautiful-selector" required>
@@ -162,10 +163,22 @@
         </div>
 
         <div class="form-group">
+            <label for="pueros">Qui ha fet la pua? (Pueros):</label>
+            <select id="pueros" name="pueros" multiple="multiple" class="chosen-select" required>
+                <option th:each="puero : ${pueros}" th:value="${puero}" th:text="${puero}"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
             <label for="victims">Víctimes:</label>
             <select id="victims" name="victims" multiple="multiple" class="chosen-select">
                 <option th:each="puero : ${pueros}" th:value="${puero}" th:text="${puero}"></option>
             </select>
+        </div>
+
+        <div class="form-group">
+            <label for="occurredAt">Data</label>
+            <input type="date" id="occurredAt" name="occurredAt" required>
         </div>
 
         <div class="form-group">
@@ -180,16 +193,6 @@
             ></textarea>
             <div class="character-counter" id="characterCount">0/2450</div>
 
-        </div>
-        <div class="form-group">
-            <label for="occurredAt">Data</label>
-            <input type="date" id="occurredAt" name="occurredAt" required>
-        </div>
-        <div class="form-group">
-            <label for="pueros">Pueros:</label>
-            <select id="pueros" name="pueros" multiple="multiple" class="chosen-select" required>
-                <option th:each="puero : ${pueros}" th:value="${puero}" th:text="${puero}"></option>
-            </select>
         </div>
 
         <div class="form-group">
