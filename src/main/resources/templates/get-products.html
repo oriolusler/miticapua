@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="<http://www.thymeleaf.org>">
+<head>
+    <meta charset="UTF-8">
+    <title>Product List</title>
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Product List</h2>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Message</th>
+            <th>Date</th>
+            <th>Pueros</th>
+            <th>Victim</th>
+            <th>Photos</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="entry : ${puas}">
+            <td th:text="${entry.key.description}"></td>
+            <td th:text="${entry.key.occurredAt}"></td>
+            <td>
+                <ul>
+                    <li th:each="puero : ${entry.key.pueros}" th:text="${puero}"></li>
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    <li th:each="victim : ${entry.key.victims}" th:text="${victim}"></li>
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    <li th:each="photo : ${entry.value}">
+                        <img style="object-fit:contain; width:200px;height:300px; border: solid 1px #CCC"
+                             th:src="@{'/get-image/' + ${photo.id}}" alt="Image">
+                    </li>
+                </ul>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>
