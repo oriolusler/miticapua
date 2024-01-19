@@ -1,14 +1,20 @@
 package com.oriolsoler.pua.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+
+import java.util.UUID;
 
 
 @Entity
 public class Image {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    private UUID id = UUID.randomUUID();
 
     // @Lob
     @Column(columnDefinition = "bytea")
@@ -26,7 +32,7 @@ public class Image {
         this.type = type;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
