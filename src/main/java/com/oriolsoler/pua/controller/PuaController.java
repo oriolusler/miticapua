@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,15 +28,13 @@ public class PuaController {
         this.imageRepository = imageRepository;
     }
 
-
-    @GetMapping("/add")
+    @GetMapping("/")
     public String addProductUI(Model model) {
         model.addAttribute("pua", new Pua());
         model.addAttribute("pueros", PUEROS);
         return "add-pua";
     }
 
-    // Add a product API
     @PostMapping("/add")
     public String addProduct(@ModelAttribute Pua pua, @RequestParam("imageFile") List<MultipartFile> images) throws java.io.IOException, IOException {
         var puaSaved = puaRepository.save(pua);
@@ -48,23 +47,21 @@ public class PuaController {
             }
         });
 
-        return "redirect:/get-products";
+        return "redirect:/resume";
     }
 
-    //Get all Products
-    @GetMapping("/get-products")
+    @GetMapping("/resume")
     public String listProducts(Model model) {
-        var puas = new HashMap<Pua, List<Image>>();
-        puaRepository.findAll().forEach(it -> {
-                    var images = imageRepository.findImageByPua(it);
-                    puas.put(it, images);
-                }
-        );
+        int year = LocalDate.now().getYear();
+        var count = puaRepository.findAll()
+                .stream()
+                .filter(it -> it.getOccurredAt().getYear() == year)
+                .count();
 
-        model.addAttribute("puas", puas);
-        return "get-products";
+        model.addAttribute("puesCount", count);
+        model.addAttribute("year", year);
+        return "resume";
     }
-
 
     @GetMapping(value = "/get-image/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseBody
@@ -75,23 +72,7 @@ public class PuaController {
         byte[] media = image.getContent();
         headers.setCacheControl(CacheControl.noCache().getHeaderValue());
 
-        ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(media, headers, HttpStatus.OK);
-        return responseEntity;
+        return new ResponseEntity<>(media, headers, HttpStatus.OK);
 
     }
-
-    //Get Image using product ID
-    /*@GetMapping(value = "/{productId}/image")
-    public ResponseEntity<byte[]> getProductImage(@PathVariable Long productId) {
-        Optional<Product> productOptional = productService.getProduct(productId);
-        if (productOptional.isPresent()) {
-            Product product = productOptional.get();
-            byte[] imageBytes = java.util.Base64.getDecoder().decode(product.getImage());
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.IMAGE_JPEG);
-            return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(new byte[0], HttpStatus.NOT_FOUND);
-        }
-    }*/
 }

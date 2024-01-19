@@ -4,10 +4,7 @@ import com.oriolsoler.pua.repository.StringListConverter;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "pua")
@@ -16,13 +13,13 @@ public class Pua {
     public static List<String> PUEROS = Arrays.asList("Erik", "Pol", "Buti", "Jaume", "Alberto", "Obi", "Suli");
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    @Column(length = 36)
+    private UUID id = UUID.randomUUID();
 
+    @Column(length = 2500)
     private String description;
 
     private LocalDate occurredAt;
-
     @Convert(converter = StringListConverter.class)
     @Column(name = "pueros", nullable = false)
     private List<String> pueros = new ArrayList<>();
@@ -31,24 +28,34 @@ public class Pua {
     @Column(name = "victims", nullable = false)
     private List<String> victims = new ArrayList<>();
 
+    private String reporter;
 
     // Hibernate expects entities to have a no-arg constructor,
     // though it does not necessarily have to be public.
     public Pua() {
     }
 
-    public Pua(String description, LocalDate occurredAt, List<String> pueros, List<String> victims) {
+    public Pua(String description, LocalDate occurredAt, List<String> pueros, List<String> victims, String reporter) {
         this.description = description;
         this.occurredAt = occurredAt;
         this.pueros = pueros;
         this.victims = victims;
+        this.reporter = reporter;
     }
 
-    public Integer getId() {
+    public String getReporter() {
+        return reporter;
+    }
+
+    public void setReporter(String reporter) {
+        this.reporter = reporter;
+    }
+
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

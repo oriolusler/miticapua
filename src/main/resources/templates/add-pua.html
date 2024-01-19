@@ -7,6 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            font-size: 18px;
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
@@ -36,12 +37,7 @@
             margin-bottom: 20px;
         }
 
-        /* label {
-             font-weight: bold;
-             margin-bottom: 8px;
-             display: block;
-         }*/
-
+        textarea,
         input,
         select,
         button {
@@ -104,12 +100,48 @@
         label {
             display: flex;
             align-items: center;
-            /*justify-content: center;*/
         }
 
         /* Optional styling for better appearance */
         input[type="checkbox"] {
             margin-right: 5px; /* Add some spacing between the checkbox and the label */
+        }
+
+        .beautiful-selector {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-color: #ffffff;
+            border: 1px solid #3498db;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        /* Style the dropdown arrow */
+        .beautiful-selector::after {
+            content: '▼'; /* Unicode character for down arrow */
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+        }
+
+        /* Style the options in the dropdown */
+        .beautiful-selector option {
+            background-color: #ffffff;
+            color: #333333;
+        }
+        .character-counter {
+            font-size: 12px;
+            bottom: 8px;
+            right: 8px;
+            color: #999;
+        }
+
+        textarea{
+            font-size: 16px;
         }
     </style>
 
@@ -122,8 +154,32 @@
     <h2>Afageix una nova pua</h2>
     <form action="/add" method="post" enctype="multipart/form-data">
         <div class="form-group">
+            <label for="reporter">Reporter:</label>
+            <select id="reporter" name="reporter" class="beautiful-selector" required>
+                <option selected="selected"></option>
+                <option th:each="puero : ${pueros}" th:value="${puero}" th:text="${puero}"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="victims">Víctimes:</label>
+            <select id="victims" name="victims" multiple="multiple" class="chosen-select">
+                <option th:each="puero : ${pueros}" th:value="${puero}" th:text="${puero}"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
             <label for="description">Descripció</label>
-            <input type="text" id="description" name="description" required>
+            <textarea
+                    class="resizable-vertical-input"
+                    rows="3"
+                    id="description"
+                    name="description"
+                    required
+                    oninput="autoIncrementHeight(this); updateCharacterCount()"
+            ></textarea>
+            <div class="character-counter" id="characterCount">0/2450</div>
+
         </div>
         <div class="form-group">
             <label for="occurredAt">Data</label>
@@ -131,14 +187,7 @@
         </div>
         <div class="form-group">
             <label for="pueros">Pueros:</label>
-            <select id="pueros" name="pueros" multiple="multiple" class="chosen-select">
-                <option th:each="puero : ${pueros}" th:value="${puero}" th:text="${puero}"></option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="victims">Victimes:</label>
-            <select id="victims" name="victims" multiple="multiple">
+            <select id="pueros" name="pueros" multiple="multiple" class="chosen-select" required>
                 <option th:each="puero : ${pueros}" th:value="${puero}" th:text="${puero}"></option>
             </select>
         </div>
@@ -191,9 +240,28 @@
         }
     }
 
-    function deleteAll() {
-        const previewContainer = document.getElementById('imagePreviewContainer');
-        previewContainer.innerHTML = '';
+    function autoIncrementHeight(textarea) {
+        // Set the height to auto to allow the textarea to resize based on content
+        textarea.style.height = 'auto';
+        // Set the height to the scrollHeight (actual content height)
+        textarea.style.height = textarea.scrollHeight + 'px';
+    }
+
+    function updateCharacterCount() {
+        var textarea = document.getElementById('description');
+        var counter = document.getElementById('characterCount');
+        var maxLength = 2450; // Set your desired character limit
+
+        var currentLength = textarea.value.length;
+        counter.textContent = currentLength + '/' + maxLength;
+
+        // You can add additional logic here, such as disabling the textarea if the limit is reached
+        if (currentLength > maxLength) {
+            textarea.value = textarea.value.substring(0, maxLength);
+            counter.style.color = 'red';
+        } else {
+            counter.style.color = '#999';
+        }
     }
 
     $(".chosen-select").chosen({
