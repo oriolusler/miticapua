@@ -32,7 +32,7 @@ public class PuaController {
     public String addProductUI(Model model) {
         model.addAttribute("pua", new Pua());
         model.addAttribute("pueros", PUEROS);
-        return "add-product";
+        return "add-pua";
     }
 
     // Add a product API
