@@ -39,7 +39,7 @@ pipeline {
         stage('Run new version') {
             steps {
                 script {
-                    sh 'docker run  -p 8082:8080 --name pua-app -e DB_USER=root -e DB_NAME=pua -e DB_PASSWORD=$DB_PASSWORD -e DB_HOST=192.168.0.220 -e DB_PORT=8009 pua:latest'
+                    sh 'docker run -d -p 8002:8080 --name pua-app -e DB_USER=root -e DB_NAME=pua -e DB_PASSWORD=$DB_PASSWORD -e DB_HOST=192.168.0.220 -e DB_PORT=8009 pua:latest'
                 }
             }
         }
