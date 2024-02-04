@@ -10,7 +10,7 @@ import java.util.*;
 @Table(name = "pua")
 public class Pua {
 
-    public static List<String> PUEROS = Arrays.asList("Erik", "Pol", "Buti", "Jaume", "Alberto", "Obi", "Suli");
+    public static List<String> PUEROS = Arrays.asList("Erik", "Pol", "Buti", "Jaume", "Alberto", "Obi", "Suli", "Frans");
 
     @Id
     @Column(length = 36)
