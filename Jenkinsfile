@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        DB_PASSWORD = credentials('pua-db-password')
+    }
+
     stages {
         stage('Building JAR') {
             steps {
