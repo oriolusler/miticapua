@@ -11,7 +11,7 @@ pipeline {
                 echo 'Building JAR'
                 script {
                     sh './gradlew clean'
-                    sh './gradlew jar'
+                    sh './gradlew bootJar'
                 }
             }
         }
