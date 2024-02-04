@@ -15,11 +15,6 @@ pipeline {
             steps {
                 echo 'Building image'
                 script {
-                    sh 'ls -al'
-                    sh 'cd build'
-                    sh 'ls -al'
-                    sh 'cd libs'
-                    sh 'ls -al'
                     sh 'docker build --tag pua .'
                 }
             }
