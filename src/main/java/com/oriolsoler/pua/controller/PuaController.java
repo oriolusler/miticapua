@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 import static com.oriolsoler.pua.entities.Pua.PUEROS;
 
@@ -64,8 +65,8 @@ public class PuaController {
 
     @GetMapping(value = "/get-image/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseBody
-    public ResponseEntity<byte[]> getImage(@PathVariable int id) {
-        var image = imageRepository.findById(id).get();
+    public ResponseEntity<byte[]> getImage(@PathVariable String id) {
+        var image = imageRepository.findById(UUID.fromString(id)).get();
 
         HttpHeaders headers = new HttpHeaders();
         byte[] media = image.getContent();
